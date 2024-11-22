@@ -10,7 +10,7 @@ class Operation {
       // Crea la tabla "notes" con los campos "id", "title" y "content".
       return db.execute(
           "CREATE TABLE notes(id INTEGER PRIMARY KEY, title TEXT, content TEXT)");
-    });
+    }, version: 1);
   }
 
   /// Inserta una nota en la base de datos.
@@ -30,6 +30,11 @@ class Operation {
 
     // Convierte la lista de mapas en una lista de notas.
     return List.generate(maps.length, (i) {
+      for (var n in maps) {
+        print("title: " + n['title']);
+      }
+
+      // devuelve una nota con los datos del mapa actual.
       return Note(
         id: maps[i]['id'],
         title: maps[i]['title'],

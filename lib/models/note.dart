@@ -1,9 +1,9 @@
 class Note {
-  final int id;
+  Note({this.id, required this.title, required this.content});
+
+  final int? id;
   final String title;
   final String content;
-
-  Note({required this.id, required this.title, required this.content});
 
   Map<String, dynamic> toMap() {
     return {

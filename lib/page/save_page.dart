@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lista_sql/db/operation.dart';
+import 'package:lista_sql/models/note.dart';
 
 class SavePage extends StatelessWidget {
   const SavePage({super.key});
@@ -60,8 +62,11 @@ class _FormSave extends StatelessWidget {
                         WidgetStatePropertyAll(Size(double.infinity, 50))),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    Operation().insertNote(Note(
+                        title: titleController.text,
+                        content: contentController.text));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(titleController.text)),
+                      const SnackBar(content: Text('Guardado con éxito')),
                     );
                   }
                 },
