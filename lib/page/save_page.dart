@@ -19,6 +19,8 @@ class SavePage extends StatelessWidget {
 
 class _FormSave extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,6 +30,7 @@ class _FormSave extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              controller: titleController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Por favor ingrese un título';
@@ -39,6 +42,7 @@ class _FormSave extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             TextFormField(
+              controller: contentController,
               maxLines: 8,
               maxLength: 1000,
               validator: (value) {
@@ -57,7 +61,7 @@ class _FormSave extends StatelessWidget {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Procesando datos')),
+                      SnackBar(content: Text(titleController.text)),
                     );
                   }
                 },
