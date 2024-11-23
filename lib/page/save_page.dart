@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:lista_sql/db/operation.dart';
 import 'package:lista_sql/models/note.dart';
 
-class SavePage extends StatelessWidget {
+class SavePage extends StatefulWidget {
   static const String route = '/save';
-  final _formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
-  final contentController = TextEditingController();
 
-  SavePage({super.key});
+  const SavePage({super.key});
+
+  @override
+  State<SavePage> createState() => _SavePageState();
+}
+
+class _SavePageState extends State<SavePage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final titleController = TextEditingController();
+
+  final contentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +24,28 @@ class SavePage extends StatelessWidget {
     Note note = ModalRoute.of(context)!.settings.arguments as Note;
 
     _init(note);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Guardar"),
+    return PopScope(
+      canPop: note.id == null ? true : false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (!didPop) {
+          //sino tenemos datos que guardar
+          if (_formKey.currentState!.validate()) {
+            final shouldPop = await _showBackDialog() ?? false;
+            if (!shouldPop) {
+              return; // No realiza navegación si el usuario cancela.
+            }
+            if (context.mounted) {
+              Navigator.pop(context); // Realiza el pop si el usuario acepta.
+            }
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Guardar"),
+        ),
+        body: _buildFrom(note),
       ),
-      body: _buildFrom(note),
     );
   }
 
@@ -81,6 +106,26 @@ class SavePage extends StatelessWidget {
                 child: const Text("Guardar"))
           ],
         ),
+      ),
+    );
+  }
+
+  Future<bool?> _showBackDialog() {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Salir"),
+        content: const Text("¿Desea salir, tiene notas sin guardar?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("No"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Sí"),
+          ),
+        ],
       ),
     );
   }
