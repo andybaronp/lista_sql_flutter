@@ -42,4 +42,10 @@ class Operation {
       );
     });
   }
+
+  Future<void> deleteNote(id) async {
+    final db = await _openDB();
+    // Elimina la nota con el id especificado de la tabla "notes".
+    await db.delete('notes', where: 'id = ?', whereArgs: [id]);
+  }
 }

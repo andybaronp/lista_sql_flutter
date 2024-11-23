@@ -54,9 +54,31 @@ class _MyListState extends State<_MyList> {
   }
 
   _creeateItem(Note note) {
-    return ListTile(
-      title: Text(note.title),
-      subtitle: Text(note.content),
+    return Dismissible(
+      key: Key(note.id.toString()),
+      background: Container(
+        color: const Color.fromARGB(198, 247, 19, 3),
+        child: const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      behavior: HitTestBehavior.opaque,
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) async {
+        await Operation().deleteNote(note.id);
+        _loadData();
+      },
+      child: ListTile(
+        title: Text(note.title),
+        subtitle: Text(note.content),
+      ),
     );
   }
 }
