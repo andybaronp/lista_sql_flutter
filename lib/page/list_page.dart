@@ -9,18 +9,7 @@ class ListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, SavePage.route,
-                arguments: Note.empty());
-          },
-          child: const Icon(Icons.add)),
-      appBar: AppBar(
-        title: const Text("Listado"),
-      ),
-      body: _MyList(),
-    );
+    return _MyList();
   }
 }
 
@@ -40,11 +29,25 @@ class _MyListState extends State<_MyList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          return _creeateItem(notes[index]);
-        });
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, SavePage.route,
+                    arguments: Note.empty())
+                .then((value) => setState(() {
+                      _loadData();
+                    }));
+          },
+          child: const Icon(Icons.add)),
+      appBar: AppBar(
+        title: const Text("Listado"),
+      ),
+      body: ListView.builder(
+          itemCount: notes.length,
+          itemBuilder: (context, index) {
+            return _creeateItem(notes[index]);
+          }),
+    );
   }
 
   _loadData() async {
@@ -79,7 +82,10 @@ class _MyListState extends State<_MyList> {
       child: ListTile(
         trailing: MaterialButton(
             onPressed: () {
-              Navigator.pushNamed(context, SavePage.route, arguments: note);
+              Navigator.pushNamed(context, SavePage.route, arguments: note)
+                  .then((value) => setState(() {
+                        _loadData();
+                      }));
             },
             child: const Icon(Icons.edit)),
         title: Text(note.title),
