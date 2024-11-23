@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       initialRoute: ListPage.route,
       routes: {
         ListPage.route: (context) => const ListPage(),
-        SavePage.route: (context) => const SavePage(),
+        SavePage.route: (context) => SavePage(),
       },
       // title: 'Material App',
       // home: const ListPage(),

@@ -12,7 +12,8 @@ class ListPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, SavePage.route);
+            Navigator.pushNamed(context, SavePage.route,
+                arguments: Note.empty());
           },
           child: const Icon(Icons.add)),
       appBar: AppBar(
@@ -76,6 +77,11 @@ class _MyListState extends State<_MyList> {
         _loadData();
       },
       child: ListTile(
+        trailing: MaterialButton(
+            onPressed: () {
+              Navigator.pushNamed(context, SavePage.route, arguments: note);
+            },
+            child: const Icon(Icons.edit)),
         title: Text(note.title),
         subtitle: Text(note.content),
       ),

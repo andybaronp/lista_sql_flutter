@@ -30,10 +30,6 @@ class Operation {
 
     // Convierte la lista de mapas en una lista de notas.
     return List.generate(maps.length, (i) {
-      for (var n in maps) {
-        print("title: " + n['title']);
-      }
-
       // devuelve una nota con los datos del mapa actual.
       return Note(
         id: maps[i]['id'],
@@ -47,5 +43,12 @@ class Operation {
     final db = await _openDB();
     // Elimina la nota con el id especificado de la tabla "notes".
     await db.delete('notes', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> updateNote(Note note) async {
+    final db = await _openDB();
+    // Actualiza la nota en la tabla "notes".
+    await db
+        .update('notes', note.toMap(), where: 'id = ?', whereArgs: [note.id]);
   }
 }
